@@ -1,0 +1,90 @@
+name: mysql
+base: core24
+version: '8.0.42'
+summary: MySQL server in a snap.
+description: |
+  The MySQL software delivers a very fast, multithreaded, multi-user,
+  and robust SQL (Structured Query Language) database server. MySQL
+  Server is intended for mission-critical, heavy-load production
+  systems as well as for embedding into mass-deployed software.
+
+grade: stable
+confinement: strict
+license: Apache-2.0
+platforms:
+  amd64:
+  arm64:
+
+system-usernames:
+  snap_daemon: shared
+
+hooks:
+  install:
+    plugs:
+      - network
+      - network-bind
+
+slots:
+  mysql-sockets:
+    interface: content
+    content: socket-directory
+    write:
+      - $SNAP_COMMON/run
+
+apps:
+  mysqld:
+    command: bin/mysqld.sh
+    daemon: simple
+    plugs:
+      - network
+      - network-bind
+  mysql:
+    command: usr/bin/mysql
+    plugs:
+      - network
+  mysqladmin:
+    command: usr/bin/mysqladmin
+    plugs:
+      - network
+  mysqlcheck:
+    command: usr/bin/mysqlcheck
+    plugs:
+      - network
+  mysqldump:
+    command: usr/bin/mysqldump
+    plugs:
+      - network
+  mysqlimport:
+    command: usr/bin/mysqlimport
+    plugs:
+      - network
+  mysqlshow:
+    command: usr/bin/mysqlshow
+    plugs:
+      - network
+  mysqlslap:
+    command: usr/bin/mysqlslap
+    plugs:
+      - network
+
+parts:
+  packages-deb:
+    plugin: nil
+    stage-packages:
+      - mysql-server-8.0=8.0.42-0ubuntu0.24.04.1
+      - util-linux
+    organize:
+      usr/share/doc/mysql-server-8.0/copyright: licenses/COPYRIGHT-mysql-server-8.0
+      usr/share/doc/util-linux/copyright: licenses/COPYRIGHT-util-linux
+  snap-license:
+    plugin: dump
+    source: .
+    source-type: local
+    stage:
+      - licenses/LICENSE-snap
+    organize:
+      LICENSE: licenses/LICENSE-snap
+  snap-scripts:
+    plugin: dump
+    source: snap/local
+    source-type: local

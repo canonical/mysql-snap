@@ -1,0 +1,5 @@
+lint:
+  name: yamllint
+  options:
+    config-data:
+      line-length: disable
