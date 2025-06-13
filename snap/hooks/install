@@ -26,8 +26,8 @@ $SNAP/usr/sbin/mysqld --initialize --datadir=$SNAP_COMMON/data --user=root
 
 # Throw error if data directory not initialized
 if [ ! -f $SNAP_COMMON/data/mysql.ibd ] ; then
-  echo "Error: MySQL was unable to initialize the data directory at $SNAP_COMMON/data"
-  exit 1
+    echo "Error: MySQL was unable to initialize the data directory at $SNAP_COMMON/data" >&2
+    exit 1
 fi
 
 # Remove "group" and "other" permission access from data directory
