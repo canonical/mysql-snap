@@ -40,5 +40,23 @@ init_snap_common() {
     chmod go-rwx $SNAP_COMMON/data
 }
 
+enable_auth_socket() {
+    local init_file="$(mktemp)"
+
+    echo "INSTALL PLUGIN auth_socket SONAME 'auth_socket.so';" >> "$init_file"
+    echo "ALTER USER 'root'@'localhost' IDENTIFIED WITH 'auth_socket';" >> "$init_file"
+    echo "SHUTDOWN;" >> "$init_file"
+    chown snap_daemon:root "$init_file"
+
+    # Run init file
+    $SNAP/usr/sbin/mysqld \
+        --defaults-file=$SNAP/etc/my.cnf \
+        --user=snap_daemon \
+        --skip-networking \
+        --skip-mysqlx \
+        --init-file="$init_file"
+}
+
 init_snap_data
 init_snap_common
+enable_auth_socket
