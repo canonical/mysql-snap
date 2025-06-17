@@ -1,34 +1,44 @@
 #!/bin/bash
 
-# Configuration
-mkdir $SNAP_DATA/etc
-cp $SNAP/etc/mysqld.cnf $SNAP_DATA/etc
-chown -R snap_daemon:root $SNAP_DATA/etc
+init_snap_data() {
+    # Configuration
+    mkdir $SNAP_DATA/etc
+    cp $SNAP/etc/mysqld.cnf $SNAP_DATA/etc
+    chown -R snap_daemon:root $SNAP_DATA/etc
 
-# Logs
-mkdir $SNAP_DATA/log
-touch $SNAP_DATA/log/error.log
-touch $SNAP_DATA/log/query.log
-touch $SNAP_DATA/log/mysql-bin.log
-touch $SNAP_DATA/log/mysql-slow.log
-chown -R snap_daemon:root $SNAP_DATA/log
+    # Logs
+    mkdir $SNAP_DATA/log
+    touch $SNAP_DATA/log/error.log
+    touch $SNAP_DATA/log/query.log
+    touch $SNAP_DATA/log/mysql-bin.log
+    touch $SNAP_DATA/log/mysql-slow.log
+    chown -R snap_daemon:root $SNAP_DATA/log
 
-# Sockets
-mkdir $SNAP_DATA/run
-chown -R snap_daemon:root $SNAP_DATA/run
+    # Sockets
+    mkdir $SNAP_DATA/run
+    chown -R snap_daemon:root $SNAP_DATA/run
+}
 
-# Create directory for storing data and set permissions
-mkdir $SNAP_COMMON/data
-chown snap_daemon:root $SNAP_COMMON/data
+init_snap_common() {
+    # Create directory for storing data and set permissions
+    mkdir $SNAP_COMMON/data
+    chown snap_daemon:root $SNAP_COMMON/data
 
-# Initialize data directory
-$SNAP/usr/sbin/mysqld --initialize --datadir=$SNAP_COMMON/data --user=root
+    # Initialize data directory
+    $SNAP/usr/sbin/mysqld \
+        --defaults-file=$SNAP/etc/my.cnf \
+        --user=root \
+        --initialize
 
-# Throw error if data directory not initialized
-if [ ! -f $SNAP_COMMON/data/mysql.ibd ] ; then
-    echo "Error: MySQL was unable to initialize the data directory at $SNAP_COMMON/data" >&2
-    exit 1
-fi
+    # Throw error if data directory not initialized
+    if [ ! -f $SNAP_COMMON/data/mysql.ibd ] ; then
+        echo "Error: MySQL was unable to initialize the data directory at $SNAP_COMMON/data" >&2
+        exit 1
+    fi
 
-# Remove "group" and "other" permission access from data directory
-chmod go-rwx $SNAP_COMMON/data
+    # Remove "group" and "other" permission access from data directory
+    chmod go-rwx $SNAP_COMMON/data
+}
+
+init_snap_data
+init_snap_common
