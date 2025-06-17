@@ -29,7 +29,7 @@ slots:
     interface: content
     content: socket-directory
     write:
-      - $SNAP_COMMON/run
+      - $SNAP_DATA/run
 
 apps:
   mysqld:

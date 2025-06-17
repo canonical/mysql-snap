@@ -9,8 +9,12 @@
 # * General Settings
 #
 [mysqld]
+pid-file            = /var/snap/mysql/current/run/mysqld.pid
+socket              = /var/snap/mysql/current/run/mysqld.sock
+datadir             = /var/snap/mysql/common/data
 bind-address		= 127.0.0.1
 mysqlx-bind-address	= 127.0.0.1
+secure-file-priv    = NULL
 port                = 3306
 mysqlx_port		    = 33060
 
