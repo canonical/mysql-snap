@@ -12,11 +12,12 @@
 pid-file            = /var/snap/_NAME_/current/run/mysqld.pid
 socket              = /var/snap/_NAME_/current/run/mysqld.sock
 datadir             = /var/snap/_NAME_/common/data
-bind-address		= 127.0.0.1
-mysqlx-bind-address	= 127.0.0.1
 secure-file-priv    = NULL
+bind-address		= 127.0.0.1
 port                = 3306
-mysqlx_port		    = 33060
+mysqlx-bind-address	= 127.0.0.1
+mysqlx-port		    = 33060
+mysqlx-socket		= /var/snap/_NAME_/current/run/mysqlx.sock
 
 #
 # * Fine Tuning

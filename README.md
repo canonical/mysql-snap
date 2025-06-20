@@ -25,9 +25,12 @@ sudo lxd init --auto
 ```
 
 ### Packing and Installing the Snap
+In order to properly test the confinement of the snap, we must install it using the `--dangerous` flag,
+instead of the `--devmode` one. See snap [installation modes](https://snapcraft.io/docs/install-modes).
+
 ```bash
 snapcraft pack
-sudo snap install ./mysql*.snap --devmode
+sudo snap install ./mysql*.snap --dangerous
 ```
 
 ## License
