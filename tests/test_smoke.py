@@ -20,7 +20,7 @@ def test_install():
         check=True,
     )
     subprocess.run(
-        f"sudo snap install ./{snap_name}_{snap_version}_amd64.snap --devmode".split(),
+        f"sudo snap install ./{snap_name}_{snap_version}_amd64.snap --dangerous".split(),
         check=True,
     )
 
