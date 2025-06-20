@@ -25,7 +25,7 @@ init_snap_common() {
     chown snap_daemon:root $SNAP_COMMON/data
 
     # Initialize data directory
-    $SNAP/usr/sbin/mysqld \
+    $SNAP/bin/setpriv.sh $SNAP/usr/sbin/mysqld \
         --defaults-file=$SNAP/etc/my.cnf \
         --user=root \
         --initialize
@@ -49,7 +49,7 @@ enable_auth_socket() {
     chown snap_daemon:root "$init_file"
 
     # Run init file
-    $SNAP/usr/sbin/mysqld \
+    $SNAP/bin/setpriv.sh $SNAP/usr/sbin/mysqld \
         --defaults-file=$SNAP/etc/my.cnf \
         --user=snap_daemon \
         --skip-networking \
