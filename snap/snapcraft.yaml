@@ -14,6 +14,7 @@ license: Apache-2.0
 platforms:
   amd64:
   arm64:
+  s390x:
 
 system-usernames:
   snap_daemon: shared
@@ -71,7 +72,7 @@ parts:
   packages-deb:
     plugin: nil
     stage-packages:
-      - mysql-server-8.0=8.0.42-0ubuntu0.24.04.1
+      - mysql-server-8.0=8.0.42-0ubuntu0.24.04.2
       - util-linux
     organize:
       usr/share/doc/mysql-server-8.0/copyright: licenses/COPYRIGHT-mysql-server-8.0
