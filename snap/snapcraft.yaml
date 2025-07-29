@@ -40,31 +40,31 @@ apps:
       - network
       - network-bind
   mysql:
-    command: usr/bin/mysql
+    command: usr/bin/mysql -S $SNAP_DATA/run/mysqld.sock
     plugs:
       - network
   mysqladmin:
-    command: usr/bin/mysqladmin
+    command: usr/bin/mysqladmin -S $SNAP_DATA/run/mysqld.sock
     plugs:
       - network
   mysqlcheck:
-    command: usr/bin/mysqlcheck
+    command: usr/bin/mysqlcheck -S $SNAP_DATA/run/mysqld.sock
     plugs:
       - network
   mysqldump:
-    command: usr/bin/mysqldump
+    command: usr/bin/mysqldump -S $SNAP_DATA/run/mysqld.sock
     plugs:
       - network
   mysqlimport:
-    command: usr/bin/mysqlimport
+    command: usr/bin/mysqlimport -S $SNAP_DATA/run/mysqld.sock
     plugs:
       - network
   mysqlshow:
-    command: usr/bin/mysqlshow
+    command: usr/bin/mysqlshow -S $SNAP_DATA/run/mysqld.sock
     plugs:
       - network
   mysqlslap:
-    command: usr/bin/mysqlslap
+    command: usr/bin/mysqlslap -S $SNAP_DATA/run/mysqld.sock
     plugs:
       - network
 

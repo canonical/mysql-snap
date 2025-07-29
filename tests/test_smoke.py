@@ -30,7 +30,7 @@ def test_all_apps():
     with open("snap/snapcraft.yaml") as file:
         snapcraft = yaml.safe_load(file)
 
-    override = {"mysqladmin": "--print-defaults"}
+    override = {}
     skip = []
 
     snap_apps = snapcraft["apps"]
@@ -47,7 +47,7 @@ def test_all_apps():
 
         print(f"Running {command}...")
         subprocess.check_output(
-            f"sudo {command} {override.get(app, '--help')}".split()
+            f"sudo {command} {override.get(app, '--version')}".split()
         )
 
 
