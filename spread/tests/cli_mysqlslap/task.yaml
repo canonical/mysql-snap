@@ -6,7 +6,7 @@ execute: |
   set -e
 
   PASS=$(grep MY-010454 /var/snap/mysql/current/log/error.log | awk '{ print $NF }')
-  CMD="sudo mysql.mysqlslap -u root --password=${PASS}"
+  CMD="mysql.mysqlslap -u root --password=${PASS}"
 
   ${CMD} -a --auto-generate-sql-execute-number=10
 

@@ -6,20 +6,20 @@ execute: |
   set -e
 
   PASS=$(grep MY-010454 /var/snap/mysql/current/log/error.log | awk '{ print $NF }')
-  CMD="sudo mysql -u root --password=${PASS}"
-  CMD_IMPORT="sudo mysql.mysqlimport -u root --password=${PASS}"
+  CMD="mysql -u root --password=${PASS}"
+  CMD_IMPORT="mysql.mysqlimport -u root --password=${PASS}"
   IMPORT_FILE="/var/snap/mysql/common/test_table.csv"
 
   # allow file import
-  echo "secure-file-priv = \"\"" | sudo tee -a /var/snap/mysql/current/etc/mysqld.cnf
-  sudo snap restart mysql.mysqld
+  echo "secure-file-priv = \"\"" | tee -a /var/snap/mysql/current/etc/mysqld.cnf
+  snap restart mysql.mysqld
 
   time until ${CMD} -e "SHOW DATABASES;" &>/dev/null; do
     echo "Waiting for mysql to be available..."
     sleep 1
   done
 
-  echo -e "1,value1,55\n2,value2,4\n3,value3,10" | sudo tee ${IMPORT_FILE}
+  echo -e "1,value1,55\n2,value2,4\n3,value3,10" | tee ${IMPORT_FILE}
 
   ${CMD} -e "CREATE DATABASE test_db;"
   ${CMD} -e "USE test_db; CREATE TABLE test_table (id INT PRIMARY KEY, name VARCHAR(50), value INT);"

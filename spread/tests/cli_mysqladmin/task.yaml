@@ -6,7 +6,7 @@ execute: |
   set -e
 
   PASS=$(grep MY-010454 /var/snap/mysql/current/log/error.log | awk '{ print $NF }')
-  CMD="sudo mysql.mysqladmin -u root --password=${PASS}"
+  CMD="mysql.mysqladmin -u root --password=${PASS}"
 
   for subcmd in status version ping variables; do
     echo "mysqladmin ${subcmd}"
