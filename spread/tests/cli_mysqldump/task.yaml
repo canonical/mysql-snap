@@ -1,0 +1,28 @@
+summary: MySQL mysqldump CLI tests
+
+execute: |
+  echo "Testing mysqldump"
+
+  set -e
+
+  PASS=$(grep MY-010454 /var/snap/mysql/current/log/error.log | awk '{ print $NF }')
+  CMD="sudo mysql -u root --password=${PASS}"
+  CMD_DUMP="sudo mysql.mysqldump -u root --password=${PASS}"
+
+  echo "Creating test db"
+  ${CMD} -e "CREATE DATABASE test_db;"
+  ${CMD} -e "USE test_db; CREATE TABLE test_table (id INT PRIMARY KEY, name VARCHAR(50));"
+  ${CMD} -e "INSERT INTO test_db.test_table (id, name) VALUES (1, 'test_name');"
+
+  echo "Dump test db"
+  ${CMD_DUMP} --databases test_db | cat >test_db.sql
+
+  echo "Drop test db"
+  ${CMD} -e "DROP DATABASE test_db;"
+
+  echo "Restore test db"
+  cat test_db.sql | ${CMD}
+
+  ${CMD} -e "SELECT * FROM test_db.test_table WHERE id = 1;"
+
+  ${CMD} -e "DROP DATABASE test_db;"
