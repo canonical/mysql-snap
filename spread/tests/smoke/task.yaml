@@ -15,6 +15,5 @@ execute: |
   done
 
   echo "Test mysqladmin"
-  mysql.mysqladmin --help &>/dev/null
   # mysqladmin return 1 when called with `--help`, 127 if not found
-  [[ $? -eq 1 ]] && exit 0
+  mysql.mysqladmin --help &>/dev/null || [ $? -eq 1 ] && exit 0 || exit 127
