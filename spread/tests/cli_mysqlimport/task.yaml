@@ -3,8 +3,6 @@ summary: MySQL mysqlimport CLI tests
 execute: |
   echo "Testing mysqlimport"
 
-  set -e
-
   PASS=$(grep MY-010454 /var/snap/mysql/current/log/error.log | awk '{ print $NF }')
   CMD="mysql -u root --password=\"${PASS}\""
   CMD_IMPORT="mysql.mysqlimport -u root --password=\"${PASS}\""

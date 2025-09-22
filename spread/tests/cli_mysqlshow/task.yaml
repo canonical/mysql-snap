@@ -3,8 +3,6 @@ summary: MySQL mysqlshow CLI tests
 execute: |
   echo "Testing mysqlshow"
 
-  set -e
-
   PASS=$(grep MY-010454 /var/snap/mysql/current/log/error.log | awk '{ print $NF }')
   CMD="mysql -u root --password=\"${PASS}\""
   CMD_SHOW="mysql.mysqlshow -u root --password=\"${PASS}\""

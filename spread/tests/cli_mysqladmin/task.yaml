@@ -3,8 +3,6 @@ summary: MySQL mysqladmin CLIs tests
 execute: |
   echo "Testing mysqladmin"
 
-  set -e
-
   PASS=$(grep MY-010454 /var/snap/mysql/current/log/error.log | awk '{ print $NF }')
   CMD="mysql.mysqladmin -u root --password=\"${PASS}\""
 

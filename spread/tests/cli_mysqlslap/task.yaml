@@ -3,8 +3,6 @@ summary: MySQL mysqlslap CLI tests
 execute: |
   echo "Testing mysql slap"
 
-  set -e
-
   PASS=$(grep MY-010454 /var/snap/mysql/current/log/error.log | awk '{ print $NF }')
   CMD="mysql.mysqlslap -u root --password=\"${PASS}\""
 
