@@ -13,6 +13,10 @@ suites:
       apt --purge remove mysql*
     prepare-each: |
       snap install "$CRAFT_ARTIFACT" --dangerous --jailmode
+      until [ -S /var/snap/mysql/current/run/mysqld.sock ]; do
+        echo "Waiting for mysqld.sock"
+        sleep 1
+      done
     restore-each: |
       snap remove mysql --purge --terminate
 
