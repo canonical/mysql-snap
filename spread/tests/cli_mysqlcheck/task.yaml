@@ -6,7 +6,7 @@ execute: |
   set -e
 
   PASS=$(grep MY-010454 /var/snap/mysql/current/log/error.log | awk '{ print $NF }')
-  CMD="mysql.mysqlcheck -u root --password=${PASS}"
+  CMD="mysql.mysqlcheck -u root --password=\"${PASS}\""
 
   ${CMD} --silent --extended --all-databases
 

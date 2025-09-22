@@ -4,7 +4,7 @@ execute: |
   echo "MySQL Snap smoke tests"
 
   PASS=$(grep MY-010454 /var/snap/mysql/current/log/error.log | awk '{ print $NF }')
-  CMD="mysql -u root --password=${PASS}"
+  CMD="mysql -u root --password=\"${PASS}\""
   SNAP_VERSION=$(awk -F\' '/version/{print $2}' "${PROJECT_PATH}"/snap/snapcraft.yaml)
   ${CMD} -e "select @@version;" -E | grep "^@@version: ${SNAP_VERSION:-error}"
 
@@ -15,6 +15,6 @@ execute: |
   done
 
   echo "Test mysqladmin"
-  mysql.mysqladmin --help $ >/dev/null
+  mysql.mysqladmin --help $>/dev/null
   # mysqladmin return 1 when called with `--help`, 127 if not found
   [[ $? -eq 1 ]] && exit 0
