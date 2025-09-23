@@ -42,12 +42,9 @@ jobs:
         with:
           pattern: ${{ needs.build.outputs.artifact-prefix }}-*-${{ matrix.platform.arch }}
           merge-multiple: true
-      - name: Add pipx to PATH
+      - name: Install dependencies
         run: |
-          echo "${HOME}/.local/bin" >> "${GITHUB_PATH}"
-          echo "/root/.local/bin" >> "${GITHUB_PATH}"
-      - name: Run tests
-        run: |
+          sudo snap install snapcraft --classic
           # lxd is necessary for spread
           sudo snap install lxd
           sudo adduser "$USER" lxd
@@ -57,6 +54,6 @@ jobs:
           # Workaround for Docker & LXD on same machine
           sudo iptables -F FORWARD
           sudo iptables -P FORWARD ACCEPT
-
-          sudo snap install snapcraft --classic
+      - name: Run tests
+        run: |
           sudo --user "$USER" --preserve-env --preserve-env=PATH -- env -- snapcraft test
