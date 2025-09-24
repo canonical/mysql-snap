@@ -1,0 +1,27 @@
+summary: MySQL mysqld service tests
+
+execute: |
+  echo "Testing service control"
+  PASS=$(grep MY-010454 /var/snap/mysql/current/log/error.log | awk '{ print $NF }')
+  CMD="mysql -u root --password=${PASS}"
+
+  # Tests service control
+  echo "Stopping mysql.mysqld"
+  snap stop mysql.mysqld
+  until [ ! -e /var/snap/mysql/current/run/mysqld.sock ]; do
+    echo "Waiting for mysqld.sock to be removed"
+    sleep 1
+  done
+
+  ${CMD} -e "SELECT 1;" &>/dev/null || :
+  snap services mysql.mysqld | grep -q inactive
+
+  echo "Starting mysql.mysqld"
+  snap start mysql.mysqld
+  until [ -S /var/snap/mysql/current/run/mysqld.sock ]; do
+    echo "Waiting for mysqld.sock to be created"
+    sleep 1
+  done
+
+  ${CMD} -e "SELECT 1;" &>/dev/null
+  snap services mysql.mysqld | grep -q " active"
