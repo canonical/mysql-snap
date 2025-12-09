@@ -1,6 +1,6 @@
 name: mysql
 base: core24
-version: '8.0.43'
+version: '8.0.44'
 summary: MySQL server in a snap.
 description: |
   The MySQL software delivers a very fast, multithreaded, multi-user,
@@ -72,7 +72,7 @@ parts:
   packages-deb:
     plugin: nil
     stage-packages:
-      - mysql-server-8.0=8.0.43-0ubuntu0.24.04.2
+      - mysql-server-8.0=8.0.44-0ubuntu0.24.04.2
       - util-linux
     organize:
       usr/share/doc/mysql-server-8.0/copyright: licenses/COPYRIGHT-mysql-server-8.0
