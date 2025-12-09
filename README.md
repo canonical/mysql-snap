@@ -53,5 +53,5 @@ snapcraft test --debug               # to open shell for failed test
 ## License
 
 The MySQL Snap is free software, distributed under the Apache
-Software License, version 2.0. See [LICENSE](https://github.com/canonical/mysql-snap/blob/8.0/edge/LICENSE)
+Software License, version 2.0. See [LICENSE](https://github.com/canonical/mysql-snap/blob/8.4/edge/LICENSE)
 for more information.
