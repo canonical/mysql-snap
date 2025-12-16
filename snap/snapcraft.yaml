@@ -67,6 +67,8 @@ apps:
     command: usr/bin/mysqlslap -S $SNAP_DATA/run/mysqld.sock
     plugs:
       - network
+  mysqlbinlog:
+    command: usr/bin/mysqlbinlog
 
 parts:
   packages-deb:
