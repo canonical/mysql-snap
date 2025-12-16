@@ -10,6 +10,10 @@ For more information on snaps, visit [snapcraft.io](https://snapcraft.io/).
 The snap can be installed directly from the Stap Store. Follow the link below for more information.
 <br>
 
+```{note}
+Requires snapd v2.73 or higher.
+```
+
 [![Get it from the Snap Store](https://snapcraft.io/static/images/badges/en/snap-store-black.svg)](https://snapcraft.io/mysql)
 
 ## Building the Snap

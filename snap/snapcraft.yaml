@@ -9,6 +9,9 @@ description: |
   Server is intended for mission-critical, heavy-load production
   systems as well as for embedding into mass-deployed software.
 
+assumes:
+  - snapd2.73
+
 grade: devel
 confinement: strict
 license: Apache-2.0
