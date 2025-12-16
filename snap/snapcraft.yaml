@@ -73,7 +73,7 @@ parts:
   packages-deb:
     plugin: nil
     stage-packages:
-      - mysql-server=8.4.7-0ubuntu2
+      - mysql-server
       - util-linux
     organize:
       usr/share/doc/mysql-server-8.4/copyright: licenses/COPYRIGHT-mysql-server-8.4
