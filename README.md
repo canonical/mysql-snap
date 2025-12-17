@@ -10,6 +10,10 @@ For more information on snaps, visit [snapcraft.io](https://snapcraft.io/).
 The snap can be installed directly from the Stap Store. Follow the link below for more information.
 <br>
 
+```{note}
+Requires snapd v2.73 or higher.
+```
+
 [![Get it from the Snap Store](https://snapcraft.io/static/images/badges/en/snap-store-black.svg)](https://snapcraft.io/mysql)
 
 ## Building the Snap
@@ -53,5 +57,5 @@ snapcraft test --debug               # to open shell for failed test
 ## License
 
 The MySQL Snap is free software, distributed under the Apache
-Software License, version 2.0. See [LICENSE](https://github.com/canonical/mysql-snap/blob/8.0/edge/LICENSE)
+Software License, version 2.0. See [LICENSE](https://github.com/canonical/mysql-snap/blob/8.4/edge/LICENSE)
 for more information.
