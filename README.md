@@ -7,7 +7,7 @@ For more information on snaps, visit [snapcraft.io](https://snapcraft.io/).
 
 ## Installing the Snap
 
-The snap can be installed directly from the Stap Store. Follow the link below for more information.
+The snap can be installed directly from the Snap Store. Follow the link below for more information.
 <br>
 
 ```{note}
