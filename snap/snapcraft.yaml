@@ -1,7 +1,7 @@
 name: mysql
 base: core26
 build-base: devel
-version: '8.4.7'
+version: '8.4.8'
 summary: MySQL server in a snap.
 description: |
   The MySQL software delivers a very fast, multithreaded, multi-user,

@@ -4,9 +4,9 @@ execute: |
   echo "MySQL Snap smoke tests"
 
   PASS=$(grep MY-010454 /var/snap/mysql/current/log/error.log | awk '{ print $NF }')
-  CMD="mysql -u root --password=\"${PASS}\""
   SNAP_VERSION=$(awk -F\' '/version/{print $2}' "${PROJECT_PATH}"/snap/snapcraft.yaml)
-  ${CMD} -e "select @@version;" -E | grep "^@@version: ${SNAP_VERSION:-error}"
+  mysql --user=root --password="${PASS}" --execute="select @@version;" -E | \
+    grep "^@@version: ${SNAP_VERSION:-error}"
 
   echo "Ensure all tools are present"
   for tool in mysqldump mysqlimport mysqlshow mysqlslap mysqlcheck; do
