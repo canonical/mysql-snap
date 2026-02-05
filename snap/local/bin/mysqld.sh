@@ -5,4 +5,4 @@ exec "${SNAP}/usr/bin/setpriv" \
     --reuid snap_daemon \
     --regid root \
     -- \
-    "${SNAP}/usr/sbin/mysqld" --defaults-file="${SNAP}/etc/my.cnf"
+    "${SNAP}/usr/bin/mysqld_safe" --defaults-file="${SNAP}/etc/my.cnf"
