@@ -9,17 +9,15 @@ concurrency:
 on:
   push:
     branches:
-      - 8.4/edge
-    paths:
-      - snap/**
+      - 8.4-26.04
   workflow_dispatch:
 
 jobs:
   build:
     name: Build snap
-    uses: canonical/data-platform-workflows/.github/workflows/build_snap.yaml@v40.0.2
+    uses: canonical/data-platform-workflows/.github/workflows/build_snap.yaml@sd-env-production
     with:
-      snapcraft-snap-channel: latest/edge
+      snapcraft-snap-channel: latest/beta/sd
 
   release:
     name: Release snap
@@ -27,7 +25,7 @@ jobs:
       - build
     uses: canonical/data-platform-workflows/.github/workflows/release_snap.yaml@v40.0.2
     with:
-      channel: 8.4/edge
+      channel: ${{ github.ref_name }}/edge/sd
       artifact-prefix: ${{ needs.build.outputs.artifact-prefix }}
     secrets:
       snap-store-token: ${{ secrets.SNAP_STORE_TOKEN }}

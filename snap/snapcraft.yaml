@@ -73,10 +73,11 @@ apps:
       - network
 
 parts:
-  packages-deb:
-    plugin: nil
+  mysql:
+    plugin: dump
+    source: bld:mysql
+    source-channel: 8.4-26.04/edge
     stage-packages:
-      - mysql-server
       - util-linux
     organize:
       usr/share/doc/mysql-server-8.4/copyright: licenses/COPYRIGHT-mysql-server-8.4
