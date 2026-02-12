@@ -38,7 +38,7 @@ slots:
 
 apps:
   mysqld:
-    command: bin/mysqld.sh
+    command: usr/bin/mysqld.sh
     daemon: simple
     plugs:
       - network
@@ -100,5 +100,5 @@ parts:
     source-type: local
     override-prime: |
       craftctl default
-      sed -i 's/_NAME_/$SNAPCRAFT_PROJECT_NAME/g' bin/*.sh
+      sed -i 's/_NAME_/$SNAPCRAFT_PROJECT_NAME/g' usr/bin/*.sh
       sed -i 's/_NAME_/$SNAPCRAFT_PROJECT_NAME/g' etc/*.cnf
