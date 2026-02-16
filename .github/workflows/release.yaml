@@ -23,7 +23,7 @@ jobs:
     name: Release snap
     needs:
       - build
-    uses: canonical/data-platform-workflows/.github/workflows/release_snap.yaml@v40.0.2
+    uses: canonical/data-platform-workflows/.github/workflows/release_snap.yaml@v41.1.3
     with:
       channel: ${{ github.ref_name }}/edge/sd
       artifact-prefix: ${{ needs.build.outputs.artifact-prefix }}
