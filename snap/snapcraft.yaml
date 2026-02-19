@@ -18,7 +18,7 @@ license: Apache-2.0
 platforms:
   amd64:
   arm64:
-#  s390x:
+  s390x:
 
 system-usernames:
   snap_daemon: shared
