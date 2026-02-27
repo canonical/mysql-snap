@@ -82,6 +82,7 @@ parts:
       - libprotobuf-lite32t64
       - libaio1t64
       - libgoogle-perftools4t64
+      - libmecab2
       - util-linux
     organize:
       usr/share/doc/mysql-server-8.4/copyright: licenses/COPYRIGHT-mysql-server-8.4
