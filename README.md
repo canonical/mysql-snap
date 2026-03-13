@@ -2,7 +2,7 @@
 
 [![Release to Snap Store](https://github.com/canonical/mysql-snap/actions/workflows/release.yaml/badge.svg)](https://github.com/canonical/mysql-snap/actions/workflows/release.yaml)
 
-This repository contains the packaging metadata for creating a snap of PostgreSQL built from the official Ubuntu repositories.
+This repository contains the packaging metadata for creating a snap of MySQL built from the official Ubuntu repositories.
 For more information on snaps, visit [snapcraft.io](https://snapcraft.io/).
 
 ## Installing the Snap
