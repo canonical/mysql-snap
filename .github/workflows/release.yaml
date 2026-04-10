@@ -12,6 +12,7 @@ on:
       - 8.0/edge
     paths:
       - snap/**
+  workflow_dispatch:
 
 jobs:
   build:
