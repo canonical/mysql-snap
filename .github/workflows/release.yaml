@@ -27,9 +27,10 @@ jobs:
       - build
     uses: canonical/data-platform-workflows/.github/workflows/release_snap_edge.yaml@v46.0.0
     with:
-      track: 8.4
+      track: '8.4'
       artifact-prefix: ${{ needs.build.outputs.artifact-prefix }}
     secrets:
       snap-store-token: ${{ secrets.SNAP_STORE_TOKEN }}
     permissions:
+      actions: read    # Needed for GitHub API call to get workflow version
       contents: write  # Needed to create git tags
