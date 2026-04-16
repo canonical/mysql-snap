@@ -17,15 +17,18 @@ on:
 jobs:
   build:
     name: Build snap
-    uses: canonical/data-platform-workflows/.github/workflows/build_snap.yaml@v46.0.0
+    uses: canonical/data-platform-workflows/.github/workflows/build_snap.yaml@v48.1.1
     with:
       snapcraft-snap-channel: latest/edge
+    permissions:
+      actions: read
+      contents: read
 
   release:
     name: Release snap
     needs:
       - build
-    uses: canonical/data-platform-workflows/.github/workflows/release_snap_edge.yaml@v46.0.0
+    uses: canonical/data-platform-workflows/.github/workflows/release_snap_edge.yaml@v48.1.1
     with:
       track: '8.4'
       artifact-prefix: ${{ needs.build.outputs.artifact-prefix }}
