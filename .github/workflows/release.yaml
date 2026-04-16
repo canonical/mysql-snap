@@ -20,6 +20,9 @@ jobs:
     uses: canonical/data-platform-workflows/.github/workflows/build_snap.yaml@v48.1.1
     with:
       snapcraft-snap-channel: latest/edge
+    permissions:
+      actions: read
+      contents: read
 
   release:
     name: Release snap

@@ -13,18 +13,23 @@ jobs:
   lint:
     name: Lint
     uses: canonical/data-platform-workflows/.github/workflows/lint_workflows.yaml@v48.1.1
+    permissions:
+      contents: read
 
   build:
     name: Build snap
     uses: canonical/data-platform-workflows/.github/workflows/build_snap.yaml@v48.1.1
     with:
       snapcraft-snap-channel: latest/edge
+    permissions:
+      actions: read
+      contents: read
 
   test:
     name: Test snap | ${{ matrix.base.version }} ${{ matrix.platform.arch }}
     timeout-minutes: 10
-    # runs-on: [self-hosted, linux, "${{ matrix.platform.host_arch }}", "${{ matrix.base.codename }}", large]
     runs-on: "ubuntu-${{ matrix.base.version }}${{ matrix.platform.gh_suffix }}"
+    permissions: {}
     strategy:
       fail-fast: false
       matrix:
@@ -39,6 +44,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v6
+        with:
+          persist-credentials: false
       - name: Download snap package(s)
         uses: actions/download-artifact@v8
         with:
