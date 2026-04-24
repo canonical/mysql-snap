@@ -9,23 +9,10 @@ concurrency:
 on:
   push:
     branches:
-      - 8.4-26.04
+      - 8.4-26.04-test-edge
   workflow_dispatch:
 
 jobs:
   build:
     name: Build snap
-    uses: canonical/data-platform-workflows/.github/workflows/build_snap.yaml@sd-env-production
-
-  release:
-    name: Release snap
-    needs:
-      - build
-    uses: canonical/data-platform-workflows/.github/workflows/release_snap.yaml@v41.1.3
-    with:
-      channel: ${{ github.ref_name }}/edge/sd
-      artifact-prefix: ${{ needs.build.outputs.artifact-prefix }}
-    secrets:
-      snap-store-token: ${{ secrets.SNAP_STORE_TOKEN }}
-    permissions:
-      contents: write  # Needed to create git tags
+    uses: canonical/data-platform-workflows/.github/workflows/build_snap.yaml@sd-env-production-fetch-edge
