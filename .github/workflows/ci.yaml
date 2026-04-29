@@ -12,13 +12,13 @@ on:
 jobs:
   lint:
     name: Lint
-    uses: canonical/data-platform-workflows/.github/workflows/lint_workflows.yaml@v48.1.1
+    uses: canonical/data-platform-workflows/.github/workflows/lint_workflows.yaml@v49.0.1
     permissions:
       contents: read
 
   build:
     name: Build snap
-    uses: canonical/data-platform-workflows/.github/workflows/build_snap.yaml@v48.1.1
+    uses: canonical/data-platform-workflows/.github/workflows/build_snap.yaml@v49.0.1
     with:
       snapcraft-snap-channel: latest/edge
     permissions:
