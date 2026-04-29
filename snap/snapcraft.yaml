@@ -1,6 +1,5 @@
 name: mysql
 base: core26
-build-base: devel
 version: '8.4.8'
 summary: MySQL server in a snap.
 description: |
@@ -9,10 +8,7 @@ description: |
   Server is intended for mission-critical, heavy-load production
   systems as well as for embedding into mass-deployed software.
 
-assumes:
-  - snapd2.73
-
-grade: devel
+grade: stable
 confinement: strict
 license: Apache-2.0
 platforms:
