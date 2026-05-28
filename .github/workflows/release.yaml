@@ -19,7 +19,7 @@ jobs:
     name: Build snap
     uses: canonical/data-platform-workflows/.github/workflows/build_snap.yaml@v49.0.1
     with:
-      snapcraft-snap-channel: latest/edge
+      snapcraft-snap-channel: latest/candidate
     permissions:
       actions: read
       contents: read
