@@ -19,8 +19,6 @@ jobs:
   build:
     name: Build snap
     uses: canonical/data-platform-workflows/.github/workflows/build_snap.yaml@v49
-    with:
-      snapcraft-snap-channel: latest/candidate
     permissions:
       actions: read
       contents: read
@@ -53,7 +51,7 @@ jobs:
           merge-multiple: true
       - name: Install dependencies
         run: |
-          sudo snap install snapcraft --candidate --classic
+          sudo snap install snapcraft --classic
           # lxd is necessary for spread
           sudo snap install lxd
           sudo adduser "$USER" lxd
