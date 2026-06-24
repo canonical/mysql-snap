@@ -1,6 +1,6 @@
 name: mysql
 base: core26
-version: '8.4.9'
+version: '8.4.10'
 summary: MySQL server in a snap.
 description: |
   The MySQL software delivers a very fast, multithreaded, multi-user,
@@ -72,10 +72,10 @@ parts:
   packages-deb:
     plugin: nil
     stage-packages:
-      - mysql-server=8.4.9-0ubuntu0.26.04.1
+      - mysql-server=8.4.10-0ubuntu0.26.04.1
       - util-linux
     organize:
-      usr/share/doc/mysql-server-8.4/copyright: licenses/COPYRIGHT-mysql-server-8.4
+      usr/share/doc/mysql-server/copyright: licenses/COPYRIGHT-mysql-server
       usr/share/doc/util-linux/copyright: licenses/COPYRIGHT-util-linux
   snap-license:
     plugin: dump
