@@ -12,13 +12,13 @@ on:
 jobs:
   lint:
     name: Lint
-    uses: canonical/data-platform-workflows/.github/workflows/lint_workflows.yaml@v49
+    uses: canonical/data-platform-workflows/.github/workflows/lint_workflows.yaml@v50
     permissions:
       contents: read
 
   build:
     name: Build snap
-    uses: canonical/data-platform-workflows/.github/workflows/build_snap.yaml@v49
+    uses: canonical/data-platform-workflows/.github/workflows/build_snap.yaml@v50
     permissions:
       actions: read
       contents: read
@@ -41,7 +41,7 @@ jobs:
       - build
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           persist-credentials: false
       - name: Download snap package(s)
