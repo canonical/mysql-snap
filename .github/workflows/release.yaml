@@ -9,7 +9,7 @@ concurrency:
 on:
   push:
     branches:
-      - 8.4/edge
+      - 9.7/edge
     paths:
       - snap/**
   workflow_dispatch:
@@ -27,7 +27,7 @@ jobs:
       - build
     uses: canonical/data-platform-workflows/.github/workflows/release_snap_edge.yaml@v50
     with:
-      track: '8.4'
+      track: '9.7'
       artifact-prefix: ${{ needs.build.outputs.artifact-prefix }}
     secrets:
       snap-store-token: ${{ secrets.SNAP_STORE_TOKEN }}

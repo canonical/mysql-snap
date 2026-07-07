@@ -12,7 +12,7 @@ execute: |
   ${CMD} -e "INSERT INTO test_db.test_table (id, name) VALUES (1, 'test_name');"
 
   echo "Dump test db"
-  ${CMD_DUMP} --databases test_db | cat >test_db.sql
+  ${CMD_DUMP} --set-gtid-purged=OFF --databases test_db | cat >test_db.sql
 
   echo "Drop test db"
   ${CMD} -e "DROP DATABASE test_db;"

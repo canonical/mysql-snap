@@ -1,6 +1,6 @@
 name: mysql
 base: core26
-version: '8.4.10'
+version: '9.7.1'
 summary: MySQL server in a snap.
 description: |
   The MySQL software delivers a very fast, multithreaded, multi-user,
@@ -45,39 +45,147 @@ apps:
       - network
       - network-bind
   mysql:
-    command: usr/bin/mysql -S $SNAP_DATA/run/mysqld.sock
+    command: bin/mysql -S $SNAP_DATA/run/mysqld.sock
     plugs:
       - network
   mysqladmin:
-    command: usr/bin/mysqladmin -S $SNAP_DATA/run/mysqld.sock
+    command: bin/mysqladmin -S $SNAP_DATA/run/mysqld.sock
     plugs:
       - network
   mysqlcheck:
-    command: usr/bin/mysqlcheck -S $SNAP_DATA/run/mysqld.sock
+    command: bin/mysqlcheck -S $SNAP_DATA/run/mysqld.sock
     plugs:
       - network
   mysqldump:
-    command: usr/bin/mysqldump -S $SNAP_DATA/run/mysqld.sock
+    command: bin/mysqldump -S $SNAP_DATA/run/mysqld.sock
     plugs:
       - network
   mysqlimport:
-    command: usr/bin/mysqlimport -S $SNAP_DATA/run/mysqld.sock
+    command: bin/mysqlimport -S $SNAP_DATA/run/mysqld.sock
     plugs:
       - network
   mysqlshow:
-    command: usr/bin/mysqlshow -S $SNAP_DATA/run/mysqld.sock
+    command: bin/mysqlshow -S $SNAP_DATA/run/mysqld.sock
     plugs:
       - network
   mysqlslap:
-    command: usr/bin/mysqlslap -S $SNAP_DATA/run/mysqld.sock
+    command: bin/mysqlslap -S $SNAP_DATA/run/mysqld.sock
     plugs:
       - network
 
 parts:
+  mysql-server:
+    plugin: cmake
+    source: https://cdn.mysql.com/Downloads/MySQL-9.7/mysql-9.7.1.tar.gz
+    source-type: tar
+    build-packages:
+      - cmake
+      - g++
+      - bison
+      - pkgconf
+      - libssl-dev
+      - libaio-dev
+      - libicu-dev
+      - libzstd-dev
+      - libcurl4-openssl-dev
+      - libfido2-dev
+      - libmecab-dev
+      - libprotobuf-dev
+      - libprotoc-dev
+      - protobuf-compiler
+      - libevent-dev
+      - libedit-dev
+      - libnuma-dev
+      - libtirpc-dev
+      - libwrap0-dev
+      - zlib1g-dev
+      - liblz4-dev
+      - lz4
+      - perl
+      - psmisc
+      - unzip
+      - chrpath
+      - libgoogle-perftools-dev
+    stage-packages:
+      - libssl3t64
+      - libaio1t64
+      - libicu78
+      - libzstd1
+      - libcurl4t64
+      - libfido2-1
+      - libmecab2
+      - libprotobuf32t64
+      - libprotobuf-lite32t64
+      - libevent-core-2.1-7t64
+      - libedit2
+      - libnuma1
+      - libtirpc3t64
+      - libwrap0
+      - zlib1g
+      - liblz4-1
+      - libgoogle-perftools4t64
+    cmake-parameters:
+      # Release (no debug info — not useful under snap confinement)
+      - -DCMAKE_BUILD_TYPE=Release
+      - -DBUILD_CONFIG=mysql_release
+      - -DCMAKE_INSTALL_PREFIX=/
+      - -DINSTALL_LAYOUT=STANDALONE
+      - -DWITH_SYSTEM_LIBS=ON
+      - -DWITH_MECAB=system
+      - -DWITH_FIDO=system
+      - -DWITH_ZLIB=system
+      - -DWITH_TCMALLOC=system
+      - -DMYSQL_UNIX_ADDR=/var/snap/mysql/current/run/mysqld.sock
+      - -DSYSCONFDIR=/var/snap/mysql/current/etc
+      - -DWITH_ARCHIVE_STORAGE_ENGINE=ON
+      - -DWITH_BLACKHOLE_STORAGE_ENGINE=ON
+      - -DWITH_FEDERATED_STORAGE_ENGINE=ON
+      - -DWITH_EXTRA_CHARSETS=all
+      # Accelerators: skip components not exposed in the snap
+      - -DWITH_NDB=OFF          # NDB Cluster (~20% of compile time)
+      - -DWITH_EMBEDDED_SERVER=OFF  # libmysqld not used
+      - -DWITH_ROUTER=OFF
+      - -DWITH_UNIT_TESTS=OFF
+      - -DINSTALL_MYSQLTESTDIR=
+    prime:
+      - -bin/comp_err
+      - -bin/ibd2sdi
+      - -bin/innochecksum
+      - -bin/my_print_defaults
+      - -bin/myisamchk
+      - -bin/myisam_ftdump
+      - -bin/myisamlog
+      - -bin/myisampack
+      - -bin/mysql_client_test
+      - -bin/mysql_config
+      - -bin/mysql_keyring_encryption_test
+      - -bin/mysql_migrate_keyring
+      - -bin/mysql_secure_installation
+      - -bin/mysql_test_event_tracking
+      - -bin/mysqltest
+      - -bin/mysqltest_safe_process
+      - -bin/mysqlxtest
+      - -bin/perror
+      - -bin/mysql_tzinfo_to_sql
+      - -lib/libmysqlclient.a
+      - -lib/libmysqlclient.so*
+      - -lib/pkgconfig
+      - -lib/libmysqlservices.a
+      - -include
+      - -man
+      - -docs
+      - -lib/plugin/*test*
+      - -lib/plugin/*example*
+    override-prime: |
+      craftctl default
+      for binary in $CRAFT_PART_INSTALL/bin/*; do
+        if file "$binary" | grep -q ELF; then
+          chrpath -d "$binary" || true
+        fi
+      done
   packages-deb:
     plugin: nil
     stage-packages:
-      - mysql-server=8.4.10-0ubuntu0.26.04.1
       - util-linux
     prime:
       # Mute lint by removing unnecessary MySQL libs
@@ -91,7 +199,6 @@ parts:
       - -usr/lib/*/libunwind-ptrace.so*
       - -usr/lib/*/libunwind-x86_64.so*
     organize:
-      usr/share/doc/mysql-server/copyright: licenses/COPYRIGHT-mysql-server
       usr/share/doc/util-linux/copyright: licenses/COPYRIGHT-util-linux
   snap-license:
     plugin: dump
