@@ -1,8 +1,13 @@
 project: mysql-snap
 
+path: /home/ubuntu/mysql-snap
+
+environment:
+  CRAFT_ARTIFACT: $(HOST:basename ./*.snap)
+
 backends:
-  craft:
-    type: craft
+  lxd:
+    type: lxd
     systems:
       - ubuntu-24.04
 
@@ -12,7 +17,7 @@ suites:
     prepare: |
       apt --purge remove mysql*
     prepare-each: |
-      snap install "$CRAFT_ARTIFACT" --dangerous --jailmode
+      snap install "${SPREAD_PATH}/${CRAFT_ARTIFACT}" --dangerous --jailmode
       until [ -S /var/snap/mysql/current/run/mysqld.sock ]; do
         echo "Waiting for mysqld.sock"
         sleep 1
