@@ -62,5 +62,5 @@ jobs:
           sudo iptables -P FORWARD ACCEPT
       - name: Run tests
         run: |
-          SNAP_FILENAME=$(ls *.snap)
+          SNAP_FILENAME=$(ls -- *.snap)
           sudo --user "$USER" --preserve-env --preserve-env=CRAFT_ARTIFACT -- env -- CRAFT_ARTIFACT="$(pwd)/$SNAP_FILENAME" "$HOME/go/bin/spread" -v
