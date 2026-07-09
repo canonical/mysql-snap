@@ -3,9 +3,8 @@ summary: MySQL SNAP smoke tests
 execute: |
   echo "MySQL Snap smoke tests"
 
-  PASS=$(grep MY-010454 /var/snap/mysql/current/log/error.log | awk '{ print $NF }')
   SNAP_VERSION=$(awk -F\' '/version/{print $2}' "${SPREAD_PATH}"/snap/snapcraft.yaml)
-  mysql --user=root --password="${PASS}" --execute="select @@version;" -E | \
+  mysql --user=root --execute="select @@version;" -E | \
     grep "^@@version: ${SNAP_VERSION:-error}"
 
   echo "Ensure all tools are present"
