@@ -15,7 +15,7 @@ suites:
   spread/tests/:
     summary: General integration tests
     prepare: |
-      apt --purge remove mysql*
+      apt --purge remove -y mysql* || true
     prepare-each: |
       snap install "${SPREAD_PATH}/${CRAFT_ARTIFACT}" --dangerous --jailmode
       until [ -S /var/snap/mysql/current/run/mysqld.sock ]; do
