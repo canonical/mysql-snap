@@ -2,8 +2,7 @@ summary: MySQL mysqld service tests
 
 execute: |
   echo "Testing service control"
-  PASS=$(grep MY-010454 /var/snap/mysql/current/log/error.log | awk '{ print $NF }')
-  CMD="mysql -u root --password=${PASS}"
+  CMD="mysql -u root"
 
   # Tests service control
   echo "Stopping mysql.mysqld"
