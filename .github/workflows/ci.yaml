@@ -63,4 +63,4 @@ jobs:
       - name: Run tests
         run: |
           SNAP_FILENAME=$(ls *.snap)
-          sudo --user "$USER" --preserve-env --preserve-env=PATH --preserve-env=CRAFT_ARTIFACT -- env -- PATH="$HOME/go/bin:$PATH" CRAFT_ARTIFACT="$(pwd)/$SNAP_FILENAME" spread -v
+          sudo --user "$USER" --preserve-env --preserve-env=CRAFT_ARTIFACT -- env -- CRAFT_ARTIFACT="$(pwd)/$SNAP_FILENAME" "$HOME/go/bin/spread" -v
