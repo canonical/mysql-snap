@@ -148,46 +148,6 @@ parts:
       - -DWITH_UNIT_TESTS=OFF
       - -DINSTALL_MYSQLTESTDIR=
     prime:
-      - -usr/bin/comp_err
-      - -usr/bin/ibd2sdi
-      - -usr/bin/innochecksum
-      - -usr/bin/my_print_defaults
-      - -usr/bin/myisamchk
-      - -usr/bin/myisam_ftdump
-      - -usr/bin/myisamlog
-      - -usr/bin/myisampack
-      - -usr/bin/mysql_client_test
-      - -usr/bin/mysql_config
-      - -usr/bin/mysql_keyring_encryption_test
-      - -usr/bin/mysql_migrate_keyring
-      - -usr/bin/mysql_secure_installation
-      - -usr/bin/mysql_test_event_tracking
-      - -usr/bin/mysqltest
-      - -usr/bin/mysqltest_safe_process
-      - -usr/bin/mysqlxtest
-      - -usr/bin/perror
-      - -usr/bin/mysql_tzinfo_to_sql
-      - -usr/lib/libmysqlclient.a
-      - -usr/lib/libmysqlclient.so*
-      - -usr/lib/pkgconfig
-      - -usr/lib/libmysqlservices.a
-      - -usr/include
-      - -usr/share/man
-      - -usr/share/mysql/docs
-      - -usr/lib/mysql/plugin/*test*
-      - -usr/lib/mysql/plugin/*example*
-    override-prime: |
-      craftctl default
-      for binary in $CRAFT_PART_INSTALL/usr/bin/* $CRAFT_PART_INSTALL/usr/sbin/mysqld; do
-        if file "$binary" | grep -q ELF; then
-          chrpath -d "$binary" || true
-        fi
-      done
-  packages-deb:
-    plugin: nil
-    stage-packages:
-      - util-linux
-    prime:
       # Mute lint by removing unnecessary MySQL libs
       # which are shipped as APT packages
       - -usr/lib/*/libicuio.so*
@@ -198,6 +158,14 @@ parts:
       - -usr/lib/*/libunwind-coredump.so*
       - -usr/lib/*/libunwind-ptrace.so*
       - -usr/lib/*/libunwind-x86_64.so*
+      - -usr/lib/libmysqlclient.so*
+      - -usr/lib/*/libevent_core*
+      - -usr/lib/*/libfido2*
+      - -usr/lib/*/libwrap*
+  packages-deb:
+    plugin: nil
+    stage-packages:
+      - util-linux
     organize:
       usr/share/doc/util-linux/copyright: licenses/COPYRIGHT-util-linux
   snap-license:
