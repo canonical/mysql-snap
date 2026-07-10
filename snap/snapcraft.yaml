@@ -7,6 +7,11 @@ description: |
   and robust SQL (Structured Query Language) database server. MySQL
   Server is intended for mission-critical, heavy-load production
   systems as well as for embedding into mass-deployed software.
+title: MySQL
+contact: https://matrix.to/#/#charmhub-data-platform:ubuntu.com
+issues: https://github.com/canonical/mysql-snap/issues
+source-code: https://github.com/canonical/mysql-snap
+website: https://canonical.com/data/mysql
 
 grade: stable
 confinement: strict
@@ -76,6 +81,12 @@ parts:
     stage-packages:
       - mysql-server=8.0.46-0ubuntu0.24.04.3
       - util-linux
+    prime:
+      # Mute lint by removing unnecessary MySQL libs
+      # which are shipped as APT packages
+      - -usr/lib/*/libicuio.so*
+      - -usr/lib/*/libicutest.so*
+      - -usr/lib/*/libicutu.so*
     organize:
       usr/share/doc/mysql-server/copyright: licenses/COPYRIGHT-mysql-server
       usr/share/doc/util-linux/copyright: licenses/COPYRIGHT-util-linux
