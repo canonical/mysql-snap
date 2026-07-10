@@ -162,6 +162,8 @@ parts:
       - -usr/lib/*/libevent_core*
       - -usr/lib/*/libfido2*
       - -usr/lib/*/libwrap*
+    organize:
+      usr/share/mysql-9.7/LICENSE: licenses/COPYRIGHT-mysql-server
   packages-deb:
     plugin: nil
     stage-packages:
