@@ -15,7 +15,7 @@ while true; do
         --reuid snap_daemon \
         --regid root \
         -- \
-        "${SNAP}/bin/mysqld" --defaults-file="${SNAP}/etc/my.cnf" --basedir="${SNAP}" &
+        "${SNAP}/usr/sbin/mysqld" --defaults-file="${SNAP}/etc/my.cnf" &
 
     wait $!
 

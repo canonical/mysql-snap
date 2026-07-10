@@ -45,31 +45,31 @@ apps:
       - network
       - network-bind
   mysql:
-    command: bin/mysql -S $SNAP_DATA/run/mysqld.sock
+    command: usr/bin/mysql -S $SNAP_DATA/run/mysqld.sock
     plugs:
       - network
   mysqladmin:
-    command: bin/mysqladmin -S $SNAP_DATA/run/mysqld.sock
+    command: usr/bin/mysqladmin -S $SNAP_DATA/run/mysqld.sock
     plugs:
       - network
   mysqlcheck:
-    command: bin/mysqlcheck -S $SNAP_DATA/run/mysqld.sock
+    command: usr/bin/mysqlcheck -S $SNAP_DATA/run/mysqld.sock
     plugs:
       - network
   mysqldump:
-    command: bin/mysqldump -S $SNAP_DATA/run/mysqld.sock
+    command: usr/bin/mysqldump -S $SNAP_DATA/run/mysqld.sock
     plugs:
       - network
   mysqlimport:
-    command: bin/mysqlimport -S $SNAP_DATA/run/mysqld.sock
+    command: usr/bin/mysqlimport -S $SNAP_DATA/run/mysqld.sock
     plugs:
       - network
   mysqlshow:
-    command: bin/mysqlshow -S $SNAP_DATA/run/mysqld.sock
+    command: usr/bin/mysqlshow -S $SNAP_DATA/run/mysqld.sock
     plugs:
       - network
   mysqlslap:
-    command: bin/mysqlslap -S $SNAP_DATA/run/mysqld.sock
+    command: usr/bin/mysqlslap -S $SNAP_DATA/run/mysqld.sock
     plugs:
       - network
 
@@ -128,8 +128,8 @@ parts:
       # Release (no debug info — not useful under snap confinement)
       - -DCMAKE_BUILD_TYPE=Release
       - -DBUILD_CONFIG=mysql_release
-      - -DCMAKE_INSTALL_PREFIX=/
-      - -DINSTALL_LAYOUT=STANDALONE
+      - -DCMAKE_INSTALL_PREFIX=/usr
+      - -DINSTALL_LAYOUT=DEB
       - -DWITH_SYSTEM_LIBS=ON
       - -DWITH_MECAB=system
       - -DWITH_FIDO=system
@@ -148,37 +148,37 @@ parts:
       - -DWITH_UNIT_TESTS=OFF
       - -DINSTALL_MYSQLTESTDIR=
     prime:
-      - -bin/comp_err
-      - -bin/ibd2sdi
-      - -bin/innochecksum
-      - -bin/my_print_defaults
-      - -bin/myisamchk
-      - -bin/myisam_ftdump
-      - -bin/myisamlog
-      - -bin/myisampack
-      - -bin/mysql_client_test
-      - -bin/mysql_config
-      - -bin/mysql_keyring_encryption_test
-      - -bin/mysql_migrate_keyring
-      - -bin/mysql_secure_installation
-      - -bin/mysql_test_event_tracking
-      - -bin/mysqltest
-      - -bin/mysqltest_safe_process
-      - -bin/mysqlxtest
-      - -bin/perror
-      - -bin/mysql_tzinfo_to_sql
-      - -lib/libmysqlclient.a
-      - -lib/libmysqlclient.so*
-      - -lib/pkgconfig
-      - -lib/libmysqlservices.a
-      - -include
-      - -man
-      - -docs
-      - -lib/plugin/*test*
-      - -lib/plugin/*example*
+      - -usr/bin/comp_err
+      - -usr/bin/ibd2sdi
+      - -usr/bin/innochecksum
+      - -usr/bin/my_print_defaults
+      - -usr/bin/myisamchk
+      - -usr/bin/myisam_ftdump
+      - -usr/bin/myisamlog
+      - -usr/bin/myisampack
+      - -usr/bin/mysql_client_test
+      - -usr/bin/mysql_config
+      - -usr/bin/mysql_keyring_encryption_test
+      - -usr/bin/mysql_migrate_keyring
+      - -usr/bin/mysql_secure_installation
+      - -usr/bin/mysql_test_event_tracking
+      - -usr/bin/mysqltest
+      - -usr/bin/mysqltest_safe_process
+      - -usr/bin/mysqlxtest
+      - -usr/bin/perror
+      - -usr/bin/mysql_tzinfo_to_sql
+      - -usr/lib/libmysqlclient.a
+      - -usr/lib/libmysqlclient.so*
+      - -usr/lib/pkgconfig
+      - -usr/lib/libmysqlservices.a
+      - -usr/include
+      - -usr/share/man
+      - -usr/share/mysql/docs
+      - -usr/lib/mysql/plugin/*test*
+      - -usr/lib/mysql/plugin/*example*
     override-prime: |
       craftctl default
-      for binary in $CRAFT_PART_INSTALL/bin/*; do
+      for binary in $CRAFT_PART_INSTALL/usr/bin/* $CRAFT_PART_INSTALL/usr/sbin/mysqld; do
         if file "$binary" | grep -q ELF; then
           chrpath -d "$binary" || true
         fi

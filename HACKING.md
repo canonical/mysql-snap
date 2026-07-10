@@ -3,6 +3,39 @@
 This document records build-internals that are correct but non-obvious,
 so future maintainers don't "fix" things that are already right.
 
+## Install Layout: DEB (usr/bin/, usr/sbin/)
+
+MySQL is built with `-DINSTALL_LAYOUT=DEB` and
+`-DCMAKE_INSTALL_PREFIX=/usr`. This puts client CLIs in `usr/bin/`,
+the server (`mysqld`) in `usr/sbin/`, plugins in
+`usr/lib/mysql/plugin/`, and shared data in
+`usr/share/mysql/` — all under the snap root.
+
+This matches the previous 8.4 snap (which repackaged the
+`mysql-server` deb) and the Debian packaging conventions.
+
+1. **It matches MySQL's compiled-in DEB defaults** — the DEB layout
+   sets `secure_file_priv` to `/var/lib/mysql-files` (overridden to
+   `NULL` in `my.cnf`) and the compiled-in plugin directory to
+   `/usr/lib/mysql/plugin`. Since the binary lives at
+   `$SNAP/usr/sbin/mysqld`, MySQL auto-detects its basedir as
+   `$SNAP/usr` (by stripping `/sbin/mysqld` from its own path), so
+   plugin loading and shared-data resolution work without any
+   `--basedir` flag. No `plugin-dir` or `lc-messages-dir` override is
+   needed in `my.cnf`.
+
+2. **It coexists with the `packages-deb` part** — `util-linux`
+   (which provides `setpriv`) also installs to `usr/bin/setpriv`. The
+   MySQL client CLIs land in `usr/bin/` alongside it; the server
+   (`mysqld`) is in `usr/sbin/`, avoiding any collision.
+
+Consequence: the `apps:` block references `usr/bin/<cli>` for client
+tools, `mysqld.sh` and the install hook reference
+`$SNAP/usr/sbin/mysqld` with no `--basedir` flag. `my.cnf` does NOT
+set `plugin-dir` or `lc-messages-dir` — MySQL auto-detects basedir from
+its binary path. Do not add `--basedir`, `plugin-dir`, or
+`lc-messages-dir` back.
+
 ## Runtime Library Provenance
 
 The source-built MySQL binaries depend on shared libraries provided by
@@ -62,17 +95,17 @@ rebuild opportunity:
 
 ## CMake Install Prefix
 
-`CMAKE_INSTALL_PREFIX=/` is correct. Do NOT change it to
+`CMAKE_INSTALL_PREFIX=/usr` is correct. Do NOT change it to
 `$CRAFT_PART_INSTALL`.
 
 The snapcraft `cmake` plugin runs the install step with
 `DESTDIR=$CRAFT_PART_INSTALL`. CMake's install logic produces
 `${DESTDIR}${CMAKE_INSTALL_PREFIX}/...`, so:
 
-- With prefix `/`: files land at `$CRAFT_PART_INSTALL/bin/mysqld`,
-  `$CRAFT_PART_INSTALL/lib/plugin/...`, etc. — correct.
+- With prefix `/usr`: files land at `$CRAFT_PART_INSTALL/usr/bin/mysqld`,
+  `$CRAFT_PART_INSTALL/usr/lib/mysql/plugin/...`, etc. — correct.
 - With prefix `$CRAFT_PART_INSTALL`: files would land at
-  `$CRAFT_PART_INSTALL/$CRAFT_PART_INSTALL/bin/mysqld` — double-nested
+  `$CRAFT_PART_INSTALL/$CRAFT_PART_INSTALL/usr/bin/mysqld` — double-nested
   and broken.
 
 No inline comment is added to `snapcraft.yaml` because any edit
@@ -99,13 +132,15 @@ When the snap's `base:` changes (e.g. `core26` → `core28`):
    If the new base drops either, add it to `stage-packages`.
 
 3. **Re-run the `ldd`/library-linter audit**: Unpack the rebuilt snap
-   and run `ldd bin/mysqld` (and the client CLIs) with
+   and run `ldd usr/sbin/mysqld` (and the client CLIs in
+   `usr/bin/`) with
    `LD_LIBRARY_PATH=usr/lib/x86_64-linux-gnu`. Confirm every library
    resolves — either inside the snap or from the base. Run
    `snapcraft linters` and confirm no missing-library errors.
 
-4. **Re-verify the `prime` glob safety**: List `lib/plugin/` contents
-   and confirm no production plugin matches `*test*` or `*example*`.
+4. **Re-verify the `prime` glob safety**: List
+   `usr/lib/mysql/plugin/` contents and confirm no production
+   plugin matches `*test*` or `*example*`.
    A new MySQL minor version may add plugins whose names collide with
    the filter globs.
 
