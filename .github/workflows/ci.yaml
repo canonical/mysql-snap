@@ -55,12 +55,12 @@ jobs:
           sudo snap install lxd
           sudo adduser "$USER" lxd
           # `newgrp` does not work in GitHub Actions; use `sudo --user` instead
-          sudo --user "$USER" --preserve-env --preserve-env=PATH -- env -- lxd waitready
-          sudo --user "$USER" --preserve-env --preserve-env=PATH -- env -- lxd init --auto
+          sudo --user "$USER" --preserve-env=PATH -- env -- lxd waitready
+          sudo --user "$USER" --preserve-env=PATH -- env -- lxd init --auto
           # Workaround for Docker & LXD on same machine
           sudo iptables -F FORWARD
           sudo iptables -P FORWARD ACCEPT
       - name: Run tests
         run: |
           SNAP_FILENAME=$(ls -- *.snap)
-          sudo --user "$USER" --preserve-env --preserve-env=CRAFT_ARTIFACT -- env -- CRAFT_ARTIFACT="$(pwd)/$SNAP_FILENAME" "$HOME/go/bin/spread" -v
+          sudo --user "$USER" --preserve-env=CRAFT_ARTIFACT -- env -- CRAFT_ARTIFACT="$(pwd)/$SNAP_FILENAME" "$HOME/go/bin/spread" -v
