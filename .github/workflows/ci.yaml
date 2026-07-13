@@ -51,16 +51,16 @@ jobs:
           merge-multiple: true
       - name: Install dependencies
         run: |
-          sudo snap install snapcraft --classic
-          # lxd is necessary for spread
+          go install github.com/canonical/spread/cmd/spread@latest
           sudo snap install lxd
           sudo adduser "$USER" lxd
           # `newgrp` does not work in GitHub Actions; use `sudo --user` instead
-          sudo --user "$USER" --preserve-env --preserve-env=PATH -- env -- lxd waitready
-          sudo --user "$USER" --preserve-env --preserve-env=PATH -- env -- lxd init --auto
+          sudo --user "$USER" --preserve-env=PATH -- env -- lxd waitready
+          sudo --user "$USER" --preserve-env=PATH -- env -- lxd init --auto
           # Workaround for Docker & LXD on same machine
           sudo iptables -F FORWARD
           sudo iptables -P FORWARD ACCEPT
       - name: Run tests
         run: |
-          sudo --user "$USER" --preserve-env --preserve-env=PATH -- env -- snapcraft test
+          SNAP_FILENAME=$(ls -- *.snap)
+          sudo --user "$USER" --preserve-env=CRAFT_ARTIFACT -- env -- CRAFT_ARTIFACT="$(pwd)/$SNAP_FILENAME" "$HOME/go/bin/spread" -v
