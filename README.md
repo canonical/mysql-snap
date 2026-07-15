@@ -2,7 +2,7 @@
 
 [![Release to Snap Store](https://github.com/canonical/mysql-snap/actions/workflows/release.yaml/badge.svg)](https://github.com/canonical/mysql-snap/actions/workflows/release.yaml)
 
-This repository contains the packaging metadata for creating a snap of MySQL built from the official Ubuntu repositories.
+This repository contains the packaging metadata for creating a snap of MySQL compiled from the upstream source.
 For more information on snaps, visit [snapcraft.io](https://snapcraft.io/).
 
 ## Installing the Snap
@@ -35,6 +35,8 @@ sudo lxd init --auto
 
 ### Packing and Installing the Snap
 
+MySQL is compiled from source during the snap build, which takes 30–60+ minutes and is memory-intensive.
+
 In order to properly test the confinement of the snap, we must install it using the `--dangerous` flag,
 instead of the `--devmode` one. See snap [installation modes](https://snapcraft.io/docs/install-modes).
 
@@ -57,5 +59,5 @@ snapcraft test --debug               # to open shell for failed test
 ## License
 
 The MySQL Snap is free software, distributed under the Apache
-Software License, version 2.0. See [LICENSE](https://github.com/canonical/mysql-snap/blob/8.4/edge/LICENSE)
+Software License, version 2.0. See [LICENSE](https://github.com/canonical/mysql-snap/blob/9.7/edge/LICENSE)
 for more information.

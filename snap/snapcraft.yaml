@@ -1,6 +1,6 @@
 name: mysql
 base: core26
-version: '8.4.10'
+version: '9.7.1'
 summary: MySQL server in a snap.
 description: |
   The MySQL software delivers a very fast, multithreaded, multi-user,
@@ -19,7 +19,7 @@ license: Apache-2.0
 platforms:
   amd64:
   arm64:
-  s390x:
+  #s390x:  # Build takes too long, restore when pre-compiled artifacts are available
 
 system-usernames:
   snap_daemon: shared
@@ -74,11 +74,82 @@ apps:
       - network
 
 parts:
-  packages-deb:
-    plugin: nil
+  mysql-server:
+    plugin: cmake
+    source: https://cdn.mysql.com/Downloads/MySQL-9.7/mysql-9.7.1.tar.gz
+    source-type: tar
+    build-packages:
+      # Adapted from Debian packaging,
+      # see https://salsa.debian.org/mariadb-team/mysql/-/blob/mysql-9.7/debian/latest/debian/control
+      - cmake
+      - g++
+      - bison
+      - pkgconf
+      - libssl-dev
+      - libaio-dev
+      - libicu-dev
+      - libzstd-dev
+      - libcurl4-openssl-dev
+      - libfido2-dev
+      - libmecab-dev
+      - libprotobuf-dev
+      - libprotoc-dev
+      - protobuf-compiler
+      - libevent-dev
+      - libedit-dev
+      - libnuma-dev
+      - libtirpc-dev
+      - libwrap0-dev
+      - zlib1g-dev
+      - liblz4-dev
+      - lz4
+      - perl
+      - psmisc
+      - unzip
+      - chrpath
+      - libgoogle-perftools-dev
     stage-packages:
-      - mysql-server=8.4.10-0ubuntu0.26.04.1
-      - util-linux
+      - libssl3t64
+      - libaio1t64
+      - libicu78
+      - libzstd1
+      - libcurl4t64
+      - libfido2-1
+      - libmecab2
+      - libprotobuf32t64
+      - libprotobuf-lite32t64
+      - libevent-core-2.1-7t64
+      - libedit2
+      - libnuma1
+      - libtirpc3t64
+      - libwrap0
+      - zlib1g
+      - liblz4-1
+      - libgoogle-perftools4t64
+    cmake-parameters:
+      # Adapted from Debian packaging,
+      # see https://salsa.debian.org/mariadb-team/mysql/-/blob/mysql-9.7/debian/latest/debian/rules
+      - -DCMAKE_BUILD_TYPE=RelWithDebInfo
+      - -DBUILD_CONFIG=mysql_release
+      - -DCMAKE_INSTALL_PREFIX=/usr
+      - -DINSTALL_LAYOUT=DEB
+      - -DWITH_SYSTEM_LIBS=ON
+      - -DWITH_MECAB=system
+      - -DWITH_FIDO=system
+      - -DWITH_ZLIB=system
+      - -DWITH_TCMALLOC=system
+      - -DWITH_ARCHIVE_STORAGE_ENGINE=ON
+      - -DWITH_BLACKHOLE_STORAGE_ENGINE=ON
+      - -DWITH_FEDERATED_STORAGE_ENGINE=ON
+      - -DWITH_EXTRA_CHARSETS=all
+      - -DWITH_EMBEDDED_SERVER=ON
+      # Adjusted for snap paths
+      - -DMYSQL_UNIX_ADDR=/var/snap/mysql/current/run/mysqld.sock
+      - -DSYSCONFDIR=/var/snap/mysql/current/etc
+      # Skip some components for faster compilation
+      - -DWITH_NDB=OFF          # NDB Cluster (~20% of compile time)
+      - -DWITH_UNIT_TESTS=OFF   # No unit tests
+      - -DINSTALL_MYSQLTESTDIR=
     prime:
       # Mute lint by removing unnecessary MySQL libs
       # which are shipped as APT packages
@@ -90,8 +161,17 @@ parts:
       - -usr/lib/*/libunwind-coredump.so*
       - -usr/lib/*/libunwind-ptrace.so*
       - -usr/lib/*/libunwind-x86_64.so*
+      - -usr/lib/libmysqlclient.so*
+      - -usr/lib/*/libevent_core*
+      - -usr/lib/*/libfido2*
+      - -usr/lib/*/libwrap*
     organize:
-      usr/share/doc/mysql-server/copyright: licenses/COPYRIGHT-mysql-server
+      usr/share/mysql-9.7/LICENSE: licenses/COPYRIGHT-mysql-server
+  packages-deb:
+    plugin: nil
+    stage-packages:
+      - util-linux
+    organize:
       usr/share/doc/util-linux/copyright: licenses/COPYRIGHT-util-linux
   snap-license:
     plugin: dump
