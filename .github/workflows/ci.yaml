@@ -20,7 +20,7 @@ jobs:
     name: Build snap
     uses: canonical/data-platform-workflows/.github/workflows/build_snap.yaml@v50
     with:
-      build-timeout: 60
+      build-timeout: 120
     permissions:
       contents: read
 

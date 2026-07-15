@@ -125,8 +125,9 @@ parts:
       - liblz4-1
       - libgoogle-perftools4t64
     cmake-parameters:
-      # Release (no debug info — not useful under snap confinement)
-      - -DCMAKE_BUILD_TYPE=Release
+      # Small changes with respect to Debian packaging,
+      # see https://salsa.debian.org/mariadb-team/mysql/-/blob/mysql-9.7/debian/latest/debian/rules
+      - -DCMAKE_BUILD_TYPE=RelWithDebInfo
       - -DBUILD_CONFIG=mysql_release
       - -DCMAKE_INSTALL_PREFIX=/usr
       - -DINSTALL_LAYOUT=DEB
@@ -135,17 +136,17 @@ parts:
       - -DWITH_FIDO=system
       - -DWITH_ZLIB=system
       - -DWITH_TCMALLOC=system
-      - -DMYSQL_UNIX_ADDR=/var/snap/mysql/current/run/mysqld.sock
-      - -DSYSCONFDIR=/var/snap/mysql/current/etc
       - -DWITH_ARCHIVE_STORAGE_ENGINE=ON
       - -DWITH_BLACKHOLE_STORAGE_ENGINE=ON
       - -DWITH_FEDERATED_STORAGE_ENGINE=ON
       - -DWITH_EXTRA_CHARSETS=all
-      # Accelerators: skip components not exposed in the snap
+      - -DWITH_EMBEDDED_SERVER=ON
+      # Adjusted for snap paths
+      - -DMYSQL_UNIX_ADDR=/var/snap/mysql/current/run/mysqld.sock
+      - -DSYSCONFDIR=/var/snap/mysql/current/etc
+      # Skip some components for faster compilation
       - -DWITH_NDB=OFF          # NDB Cluster (~20% of compile time)
-      - -DWITH_EMBEDDED_SERVER=OFF  # libmysqld not used
-      - -DWITH_ROUTER=OFF
-      - -DWITH_UNIT_TESTS=OFF
+      - -DWITH_UNIT_TESTS=OFF   # No unit tests
       - -DINSTALL_MYSQLTESTDIR=
     prime:
       # Mute lint by removing unnecessary MySQL libs
