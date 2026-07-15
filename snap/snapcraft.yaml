@@ -19,7 +19,7 @@ license: Apache-2.0
 platforms:
   amd64:
   arm64:
-  #s390x:
+  #s390x:  # Build takes too long, restore when pre-compiled artifacts are available
 
 system-usernames:
   snap_daemon: shared
@@ -79,6 +79,8 @@ parts:
     source: https://cdn.mysql.com/Downloads/MySQL-9.7/mysql-9.7.1.tar.gz
     source-type: tar
     build-packages:
+      # Adapted from Debian packaging,
+      # see https://salsa.debian.org/mariadb-team/mysql/-/blob/mysql-9.7/debian/latest/debian/control
       - cmake
       - g++
       - bison
@@ -125,7 +127,7 @@ parts:
       - liblz4-1
       - libgoogle-perftools4t64
     cmake-parameters:
-      # Small changes with respect to Debian packaging,
+      # Adapted from Debian packaging,
       # see https://salsa.debian.org/mariadb-team/mysql/-/blob/mysql-9.7/debian/latest/debian/rules
       - -DCMAKE_BUILD_TYPE=RelWithDebInfo
       - -DBUILD_CONFIG=mysql_release
