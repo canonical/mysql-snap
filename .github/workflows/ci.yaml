@@ -12,15 +12,14 @@ on:
 jobs:
   lint:
     name: Lint
-    uses: canonical/data-platform-workflows/.github/workflows/lint_workflows.yaml@v49
+    uses: canonical/data-platform-workflows/.github/workflows/lint_workflows.yaml@v50
     permissions:
       contents: read
 
   build:
     name: Build snap
-    uses: canonical/data-platform-workflows/.github/workflows/build_snap.yaml@v49
+    uses: canonical/data-platform-workflows/.github/workflows/build_snap.yaml@v50
     permissions:
-      actions: read
       contents: read
 
   test:
