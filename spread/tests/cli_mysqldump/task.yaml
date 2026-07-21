@@ -1,5 +1,12 @@
 summary: MySQL mysqldump CLI tests
 
+prepare: |
+  snap install "${SPREAD_PATH}/$(basename "${CRAFT_ARTIFACT}")" --dangerous --jailmode
+  until [ -S /var/snap/mysql/current/run/mysqld.sock ]; do
+    echo "Waiting for mysqld.sock"
+    sleep 1
+  done
+
 execute: |
   echo "Testing mysqldump"
 
@@ -23,3 +30,6 @@ execute: |
   ${CMD} -e "SELECT * FROM test_db.test_table WHERE id = 1;"
 
   ${CMD} -e "DROP DATABASE test_db;"
+
+restore: |
+  snap remove mysql --purge --terminate
