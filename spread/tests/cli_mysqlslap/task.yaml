@@ -1,5 +1,12 @@
 summary: MySQL mysqlslap CLI tests
 
+prepare: |
+  snap install "${SPREAD_PATH}/$(basename "${CRAFT_ARTIFACT}")" --dangerous --jailmode
+  until [ -S /var/snap/mysql/current/run/mysqld.sock ]; do
+    echo "Waiting for mysqld.sock"
+    sleep 1
+  done
+
 execute: |
   echo "Testing mysql slap"
 
@@ -7,3 +14,5 @@ execute: |
 
   ${CMD} -a --auto-generate-sql-execute-number=10
 
+restore: |
+  snap remove mysql --purge --terminate

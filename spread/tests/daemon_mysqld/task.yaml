@@ -1,5 +1,12 @@
 summary: MySQL mysqld service tests
 
+prepare: |
+  snap install "${SPREAD_PATH}/$(basename "${CRAFT_ARTIFACT}")" --dangerous --jailmode
+  until [ -S /var/snap/mysql/current/run/mysqld.sock ]; do
+    echo "Waiting for mysqld.sock"
+    sleep 1
+  done
+
 execute: |
   echo "Testing service control"
   CMD="mysql -u root"
@@ -24,3 +31,6 @@ execute: |
 
   ${CMD} -e "SELECT 1;" &>/dev/null
   snap services mysql.mysqld | grep -q " active"
+
+restore: |
+  snap remove mysql --purge --terminate
