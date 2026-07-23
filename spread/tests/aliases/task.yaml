@@ -1,4 +1,4 @@
-summary: MySQL mysqlcheck CLI tests
+summary: MySQL CLI tools tests
 
 prepare: |
   snap install "${SPREAD_PATH}/$(basename "${CRAFT_ARTIFACT}")" --dangerous --jailmode
@@ -8,11 +8,11 @@ prepare: |
   done
 
 execute: |
-  echo "Testing mysqlcheck"
+  echo "Testing SNAP aliases"
 
-  CMD="mysql.mysqlcheck -u root"
-
-  ${CMD} --silent --extended --all-databases
+  snap alias mysql.mysql mysql-alias
+  mysql-alias --help
+  mysql-alias --user=root --execute="SELECT NOW();"
 
 restore: |
   snap remove mysql --purge --terminate
