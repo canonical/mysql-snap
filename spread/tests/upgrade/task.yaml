@@ -1,0 +1,33 @@
+summary: MySQL upgrade tests
+
+prepare: |
+  snap install mysql --channel 8.4/edge
+  until [ -S /var/snap/mysql/current/run/mysqld.sock ]; do
+    echo "Waiting for mysqld.sock"
+    sleep 1
+  done
+
+execute: |
+  echo "Creating test data..."
+  
+  CMD="mysql -u root"
+  
+  ${CMD} --execute="
+    CREATE DATABASE test_db;
+    CREATE TABLE test_db.test (id SERIAL PRIMARY KEY, name TEXT);
+    INSERT INTO test_db.test (name) VALUES ('test1');
+    SELECT * FROM test_db.test;
+  "
+
+  echo "Upgrading to local snap..."
+  snap install "${SPREAD_PATH}/$(basename "${CRAFT_ARTIFACT}")" --dangerous --jailmode
+  until [ -S /var/snap/mysql/current/run/mysqld.sock ]; do
+    echo "Waiting for mysqld.sock"
+    sleep 1
+  done
+  
+  echo "Checking test data after installation..."
+  ${CMD} --execute="SELECT * FROM test_db.test;"
+
+restore: |
+  snap remove mysql --purge --terminate

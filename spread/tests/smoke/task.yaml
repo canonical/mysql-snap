@@ -1,5 +1,12 @@
 summary: MySQL SNAP smoke tests
 
+prepare: |
+  snap install "${SPREAD_PATH}/$(basename "${CRAFT_ARTIFACT}")" --dangerous --jailmode
+  until [ -S /var/snap/mysql/current/run/mysqld.sock ]; do
+    echo "Waiting for mysqld.sock"
+    sleep 1
+  done
+
 execute: |
   echo "MySQL Snap smoke tests"
 
@@ -16,3 +23,6 @@ execute: |
   echo "Test mysqladmin"
   # mysqladmin return 1 when called with `--help`, 127 if not found
   mysql.mysqladmin --help &>/dev/null || [ $? -eq 1 ] && exit 0 || exit 127
+
+restore: |
+  snap remove mysql --purge --terminate
