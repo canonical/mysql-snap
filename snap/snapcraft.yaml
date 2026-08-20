@@ -1,6 +1,6 @@
 name: mysql
 base: core26
-version: '9.7.1'
+version: '9.7.2'
 summary: MySQL server in a snap.
 description: |
   The MySQL software delivers a very fast, multithreaded, multi-user,
@@ -76,7 +76,7 @@ apps:
 parts:
   mysql-server:
     plugin: cmake
-    source: https://cdn.mysql.com/Downloads/MySQL-9.7/mysql-9.7.1.tar.gz
+    source: https://cdn.mysql.com/Downloads/MySQL-9.7/mysql-9.7.2.tar.gz
     source-type: tar
     build-packages:
       # Adapted from Debian packaging,
