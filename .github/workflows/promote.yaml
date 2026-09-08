@@ -25,7 +25,7 @@ on:
 jobs:
   promote:
     name: Promote snaps
-    uses: canonical/data-platform-workflows/.github/workflows/_promote_snaps.yaml@v50
+    uses: canonical/data-platform-workflows/.github/workflows/_promote_snaps.yaml@v52
     with:
       track: '8.4'
       from-risk: ${{ inputs.from-risk }}
